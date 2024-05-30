@@ -8,7 +8,7 @@ Need green light on to be working
 
 Commands:
 
-    ** sudo raspi-config
+    sudo raspi-config
 - config w/o flashing - good for wifi
 
     ** sudo halt
