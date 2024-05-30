@@ -1,8 +1,15 @@
 # volunteer
+**To Do**
+1. Setup VNC
+2. Setup Docker
+3. 
 
-### raspberrypi helper notes
+## raspberrypi helper notes
 Host name: db
 Password: leghun1..
+
+### docker
+used to host installs
 
 Need green light on to be working
 
