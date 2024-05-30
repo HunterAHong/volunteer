@@ -2,7 +2,9 @@
 **To Do**
 1. Setup VNC
 2. Setup Docker
-3. 
+3. Choose backend and frontend interaction
+4. make working webpage
+5. make working db interaction 
 
 ## raspberrypi helper notes
 Host name: db
