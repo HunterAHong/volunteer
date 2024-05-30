@@ -7,10 +7,10 @@ Password: leghun1..
 Need green light on to be working
 
 Commands:
-sudo raspi-config
 
-    ** config w/o flashing - good for wifi
-sudo halt
+    ** sudo raspi-config
+- config w/o flashing - good for wifi
 
-    ** good to do before unplugging
-    ** Have to turn off and turn on again to work
+    ** sudo halt
+- good to do before unplugging
+- Have to turn off and turn on again to work
