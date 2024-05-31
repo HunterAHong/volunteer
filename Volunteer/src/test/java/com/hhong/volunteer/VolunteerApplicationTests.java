@@ -1,4 +1,4 @@
-package com.hhong.Volunteer;
+package com.hhong.volunteer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
