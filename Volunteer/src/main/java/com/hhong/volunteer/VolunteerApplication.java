@@ -1,4 +1,4 @@
-package com.hhong.volunteer;
+package com.hhong.Volunteer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
