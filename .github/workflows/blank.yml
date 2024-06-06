@@ -28,6 +28,22 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
+      - name: Build Volunteer with Maven
+        run: cd Volunteer && mvn --batch-mode --update-snapshots clean test
+
+      - name: Generate coverage badges
+        id: jacoco
+        run: > 
+            python3 .github/generate_badge.py "Volunteer/target/site/jacoco-ut/jacoco.csv"
+            ".github/badges" "jacoco.svg" "branches.svg" "true" "true"
+            "fail" "70" "50" "false" "false" "100 90 80 70 60 0" "#4c1 #97ca00 #a4a61d #dfb317 #fe7d37 #e05d44"
+
+      - name: Log coverage percentage
+        if: always()
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
+      
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
