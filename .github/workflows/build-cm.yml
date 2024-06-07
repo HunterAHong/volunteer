@@ -72,7 +72,7 @@ jobs:
                
       - name: Publish Test Report
         if: ${{ always() }}
-        uses: hhong/action-surefire-report@master
+        uses: kpresler/action-surefire-report@master
           
       - name: Add coverage to PR
         id: publishJacoco
@@ -85,7 +85,7 @@ jobs:
           
       - name: Publish CheckStyle Report
         if: ${{ always() }}
-        uses: hhong/checkstyle-github-action@master
+        uses: kpresler/checkstyle-github-action@master
         with:
           path: '**/checkstyle-result.xml'      
           
