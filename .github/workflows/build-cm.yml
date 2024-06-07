@@ -48,10 +48,10 @@ jobs:
         run: sed -i 's/password\:/password\:\ root1234/g' Volunteer/src/main/resources/application.yml    
          
       - name: Check to make sure DB is active
-        run: mysql -uroot -h localhost -P 3306 --protocol=tcp -proot1234 -e 'SELECT version()'
+        run: mysql -uroot -h 127.0.0.1 -P 3306 --protocol=tcp -proot1234 -e 'SELECT version()'
         
       - name: Drop old database to get a fresh state
-        run: mysql -uroot -h localhost -P 3306 --protocol=tcp -proot1234 -e 'DROP DATABASE IF EXISTS Volunteer;'
+        run: mysql -uroot -h 127.0.0.1 -P 3306 --protocol=tcp -proot1234 -e 'DROP DATABASE IF EXISTS Volunteer;'
       
       - name: Build Volunteer with Maven
         run: cd Volunteer && mvn --batch-mode --update-snapshots clean test checkstyle:checkstyle
