@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -57,7 +58,8 @@ public class UserTest {
     }
 
     @Test
-    public void testAddProfile() {
+    @Transactional
+    public void testAddUser() {
         User user = createUser();
         userService.save(user);
 
@@ -67,5 +69,21 @@ public class UserTest {
 
         Assertions.assertEquals(user, users.get(0),
                 "The retrieved user should match the created one");
+    }
+
+    @Test
+    @Transactional
+    public void testDeleteUser() {
+        Assertions.assertEquals(0, userService.findAll().size(),
+                "There should be no users");
+
+        final User user = createUser();
+        userService.save(user);
+
+        Assertions.assertEquals(1, userService.count(), "There should be one user in the database");
+
+        userService.delete(user);
+        Assertions.assertEquals(0, userService.findAll().size(),
+                "There should be no users");
     }
 }
