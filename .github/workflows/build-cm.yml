@@ -10,7 +10,7 @@ on:
       - development
 jobs:
   Build-Volunteer:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions: write-all
     steps:
       - name: Publish reminder
