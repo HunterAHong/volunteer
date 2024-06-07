@@ -1,7 +1,7 @@
-package repositories;
+package com.hhong.Volunteer.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import models.User;
+import com.hhong.Volunteer.models.User;
 
 /**
  * User repository used to provide CRUD operations.

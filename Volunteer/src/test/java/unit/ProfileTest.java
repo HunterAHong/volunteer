@@ -1,11 +1,9 @@
 package unit;
 
 import Volunteer.TestConfig;
-import models.Profile;
-import services.UserService;
+import com.hhong.Volunteer.models.Profile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

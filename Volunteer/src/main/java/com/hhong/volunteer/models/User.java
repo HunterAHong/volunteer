@@ -1,10 +1,6 @@
-package models;
+package com.hhong.Volunteer.models;
 
-import java.io.Serializable;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class User extends DomainObject {
@@ -13,6 +9,8 @@ public class User extends DomainObject {
     private Long id;
 
     private String phoneNumber;
+
+    @Embedded
     private Profile profile;
 
     public User() {

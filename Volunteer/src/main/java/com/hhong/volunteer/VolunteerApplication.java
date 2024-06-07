@@ -7,9 +7,9 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 //need to get this to automatically scan all packages
-@ComponentScan(basePackages = "controllers")
-@ComponentScan(basePackages = "services")
-@ComponentScan(basePackages = "repositories")
+//@ComponentScan(basePackages = "controllers")
+//@ComponentScan(basePackages = "services")
+//@ComponentScan(basePackages = "repositories")
 @PropertySource("classpath:application.yml")
 public class VolunteerApplication {
 	public static void main(String[] args) {

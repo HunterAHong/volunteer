@@ -1,5 +1,8 @@
-package models;
+package com.hhong.Volunteer.models;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class Profile {
     private String first;
     private String last;

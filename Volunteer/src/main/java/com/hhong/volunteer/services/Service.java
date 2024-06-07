@@ -1,4 +1,4 @@
-package services;
+package com.hhong.Volunteer.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import models.DomainObject;
+import com.hhong.Volunteer.models.DomainObject;
 
 /**
  * The Service class is responsible for providing CRUD operations against the database. It gives us

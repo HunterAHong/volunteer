@@ -1,4 +1,4 @@
-package models;
+package com.hhong.Volunteer.models;
 
 import java.io.Serializable;
 

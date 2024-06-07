@@ -1,13 +1,12 @@
-package services;
+package com.hhong.Volunteer.services;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
-import models.User;
-import repositories.UserRepository;
+import com.hhong.Volunteer.models.User;
+import com.hhong.Volunteer.repositories.UserRepository;
 
 @Component
 @Transactional

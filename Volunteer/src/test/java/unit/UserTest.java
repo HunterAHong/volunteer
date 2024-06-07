@@ -1,10 +1,10 @@
 package unit;
 
 import Volunteer.TestConfig;
-import models.Profile;
-import models.User;
+import com.hhong.Volunteer.models.Profile;
+import com.hhong.Volunteer.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import services.UserService;
+import com.hhong.Volunteer.services.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
