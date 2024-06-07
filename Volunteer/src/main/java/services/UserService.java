@@ -1,16 +1,19 @@
 package services;
 
-import models.User;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
+import models.User;
 import repositories.UserRepository;
 
+@Component
+@Transactional
 public class UserService extends Service<User, Long>{
     /**
-     * Local IngredientRepository.
+     * Local UserRepository.
      */
     @Autowired
     private UserRepository userRepository;
@@ -24,7 +27,7 @@ public class UserService extends Service<User, Long>{
     }
 
     /**
-     * Find an user with the provided phone number.
+     * Find a user with the provided phone number.
      *
      * @param phoneNumber number of the user to find
      *

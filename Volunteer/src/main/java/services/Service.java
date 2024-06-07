@@ -10,7 +10,7 @@ import models.DomainObject;
 
 /**
  * The Service class is responsible for providing CRUD operations against the database. It gives us
- * a way to save objects, update them, retrieve the, or delete them. You should extend this class
+ * a way to save objects, update them, retrieve them, or delete them. You should extend this class
  * with your own Service for each persistent class (see the `models` package) that you create. Your
  * new *Service can then be `Autowired` into the API controllers and tests that need it.
  *
