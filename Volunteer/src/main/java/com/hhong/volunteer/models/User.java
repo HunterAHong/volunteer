@@ -61,6 +61,11 @@ public class User extends DomainObject {
         return profile;
     }
 
+    public void editUser(User editedUser) {
+        this.phoneNumber = editedUser.getPhoneNumber();
+        this.profile = editedUser.getProfile();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
