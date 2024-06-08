@@ -1,6 +1,6 @@
-package unit;
+package com.hhong.Volunteer.unit;
 
-import Volunteer.TestConfig;
+import com.hhong.Volunteer.TestConfig;
 import com.hhong.Volunteer.models.Profile;
 import com.hhong.Volunteer.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
