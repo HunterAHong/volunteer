@@ -78,4 +78,13 @@ public class User extends DomainObject {
     public int hashCode() {
         return Objects.hash(id, phoneNumber, profile);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", profile=" + profile +
+                '}';
+    }
 }
