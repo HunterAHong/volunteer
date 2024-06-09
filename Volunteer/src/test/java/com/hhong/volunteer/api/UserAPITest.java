@@ -1,5 +1,6 @@
 package com.hhong.Volunteer.api;
 
+import com.hhong.Volunteer.TestConfig;
 import com.hhong.Volunteer.common.TestUtils;
 import com.hhong.Volunteer.models.Profile;
 import com.hhong.Volunteer.models.User;
@@ -19,9 +20,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = TestConfig.class)
 public class UserAPITest {
     @Autowired
     private UserService service;
@@ -39,6 +40,16 @@ public class UserAPITest {
         user.setProfile(profile);
 
         return user;
+    }
+
+    @Test
+    @Transactional
+    public void testGetUsers() throws Exception {
+        service.save(createUser());
+
+        String user = mvc.perform(get("/api/v1/users")).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Assertions.assertTrue(user.contains("Hunter"));
     }
 
     /**
