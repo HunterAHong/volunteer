@@ -68,4 +68,88 @@ public class UserAPITest {
         mvc.perform(post("/api/v1/users").contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtils.asJsonString(user))).andExpect(status().isOk());
     }
+
+    /**
+     * Tests adding (POST) a user
+     */
+    @Test
+    @Transactional
+    public void testAddUser() throws Exception {
+        service.deleteAll();
+
+        Assertions.assertEquals(0, service.findAll().size(),
+                "There should be no Users");
+
+        final User user = createUser();
+        mvc.perform(post("/api/v1/users").contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJsonString(user)));
+
+        Assertions.assertEquals(1, service.count());
+    }
+
+    /**
+     * Tests getting a nonexistent User from the database.
+     *
+     * @throws Exception if GET fails
+     */
+    @Test
+    @Transactional
+    public void testGetInvalidUser() throws Exception {
+        service.deleteAll();
+
+        final User user = createUser();
+        service.save(user);
+
+        String newUser = mvc.perform(get("/api/v1/users/3333333333"))
+                .andExpect(status().isNotFound()).andReturn().getResponse().getContentAsString();
+    }
+
+    /**
+     * Tests deleting a User using DELETE.
+     */
+    @Test
+    @Transactional
+    public void testDeleteUser() {
+        service.deleteAll(); // Clean slate
+        final User user = createUser();
+        service.save(user);
+
+        try {
+            mvc.perform(delete("/api/v1/users/5253932000")).andExpect(status().isOk());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail("Deleting a user returned bad status");
+        }
+
+        try {
+            mvc.perform(delete("/api/v1/users/5253932000")).andExpect(status().isNotFound());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail("Deleting a non-existent user returned unexpected status");
+        }
+    }
+
+    /**
+     * Tests editing a user in the db
+     */
+    @Test
+    @Transactional
+    public void testEditUser() {
+        final User user = createUser();
+        service.save(user);
+
+        User user2 = createUser();
+        user2.setPhoneNumber("3132015000");
+
+        try {
+            mvc.perform(put("/api/v1/users/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString(user2))).andExpect(status().isOk());
+            String newUser = mvc.perform(get("/api/v1/users/5253932000")).andExpect(status().isOk())
+                    .andReturn().getResponse().getContentAsString();
+            Assertions.assertTrue(newUser.contains("3132015000"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail();
+        }
+    }
 }
