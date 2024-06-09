@@ -139,14 +139,16 @@ public class UserAPITest {
         service.save(user);
 
         User user2 = createUser();
-        user2.setPhoneNumber("3132015000");
+        user2.setPhoneNumber("5253932000");
+        Profile profile = new Profile("NotHunter", "Hong", "Bio");
+        user2.setProfile(profile);
 
         try {
             mvc.perform(put("/api/v1/users/5253932000").contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtils.asJsonString(user2))).andExpect(status().isOk());
             String newUser = mvc.perform(get("/api/v1/users/5253932000")).andExpect(status().isOk())
                     .andReturn().getResponse().getContentAsString();
-            Assertions.assertTrue(newUser.contains("3132015000"));
+            Assertions.assertTrue(newUser.contains("NotHunter"));
         } catch (Exception e) {
             e.printStackTrace();
             Assertions.fail();
