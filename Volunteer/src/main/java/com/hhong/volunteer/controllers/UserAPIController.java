@@ -5,13 +5,7 @@ import com.hhong.Volunteer.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +15,7 @@ import java.util.List;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @RestController
+@RequestMapping("/api/v1")
 public class UserAPIController extends APIController {
     @Autowired
     private UserService service;
@@ -30,7 +25,7 @@ public class UserAPIController extends APIController {
      *
      * @return JSON representation of all Users
      */
-    @GetMapping(BASE_PATH + "/users")
+    @GetMapping("/users")
     public List<User> getUsers() {
         return service.findAll();
     }
@@ -42,7 +37,7 @@ public class UserAPIController extends APIController {
      * @param phoneNumber User phoneNumber
      * @return response to the request
      */
-    @GetMapping(BASE_PATH + "/users/{phoneNumber}")
+    @GetMapping("/users/{phoneNumber}")
     public ResponseEntity getUser(@PathVariable("phoneNumber") final String phoneNumber) {
         final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
         return null == user
@@ -61,7 +56,7 @@ public class UserAPIController extends APIController {
      * @return ResponseEntity indicating success if the User could be saved, or
      *         an error if it could not be
      */
-    @PostMapping(BASE_PATH + "/users")
+    @PostMapping("/users")
     public ResponseEntity createUser(@RequestBody final User user) {
         if (null != service.findByPhoneNumber(user.getPhoneNumber().trim().toLowerCase())) {
             return new ResponseEntity(errorResponse("User with the phone number "
@@ -82,7 +77,7 @@ public class UserAPIController extends APIController {
      * @param user the user to edit
      * @return the response to the request
      */
-    @PutMapping(BASE_PATH + "/users/{name}")
+    @PutMapping("/users/{name}")
     public ResponseEntity editUser(@RequestBody final User user) {
         final User dbUser = service.findByPhoneNumber(user.getPhoneNumber());
         dbUser.editUser(user);
@@ -96,7 +91,7 @@ public class UserAPIController extends APIController {
      * @param phoneNumber The phone number of the User to delete
      * @return Success if the User could be deleted; an error if the User does not exist
      */
-    @DeleteMapping(BASE_PATH + "/users/{phoneNumber}")
+    @DeleteMapping("/users/{phoneNumber}")
     public ResponseEntity deleteUser(@PathVariable final String phoneNumber) {
         final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
         if (null == user) {
