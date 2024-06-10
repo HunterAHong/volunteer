@@ -72,7 +72,7 @@ public class UserAPIController extends APIController {
     }
 
     /**
-     * Update access to a User.
+     * Update a User.
      *
      * @param user the user to edit
      * @return the response to the request
