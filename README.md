@@ -6,10 +6,6 @@
 4. make working webpage
 5. make working db interaction 
 
-## raspberrypi helper notes
-Host name: db
-Password: leghun1..
-
 ### docker
 used to host installs
 
