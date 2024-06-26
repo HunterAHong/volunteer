@@ -11,20 +11,13 @@ public class User extends DomainObject {
     private Long id;
 
     private String phoneNumber;
-
-    @Embedded
-    private Profile profile;
+    private String first;
+    private String last;
+    private String bio;
 
     public User() {
-        this.profile = new Profile();
         this.phoneNumber = "";
     }
-    public User(Profile profile, String phoneNumber) {
-        super();
-        this.profile = profile;
-        this.phoneNumber = phoneNumber;
-    }
-
     public User(String phoneNumber) {
         super();
         this.phoneNumber = phoneNumber;
@@ -49,21 +42,39 @@ public class User extends DomainObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getLast() {
+        return last;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
+    }
+
+    public String getFirst() {
+        return first;
+    }
+
+    public void setFirst(String first) {
+        this.first = first;
     }
 
     public void editUser(User editedUser) {
         this.phoneNumber = editedUser.getPhoneNumber();
-        this.profile = editedUser.getProfile();
+        this.bio = editedUser.getBio();
+        this.last = editedUser.getLast();
+        this.first = editedUser.getFirst();
     }
 
     @Override
@@ -71,12 +82,12 @@ public class User extends DomainObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(profile, user.profile);
+        return Objects.equals(id, user.id) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(first, user.first) && Objects.equals(last, user.last) && Objects.equals(bio, user.bio);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, phoneNumber, profile);
+        return Objects.hash(id, phoneNumber, first, last, bio);
     }
 
     @Override
@@ -84,7 +95,9 @@ public class User extends DomainObject {
         return "User{" +
                 "id=" + id +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", profile=" + profile +
+                ", first='" + first + '\'' +
+                ", last='" + last + '\'' +
+                ", bio='" + bio + '\'' +
                 '}';
     }
 }

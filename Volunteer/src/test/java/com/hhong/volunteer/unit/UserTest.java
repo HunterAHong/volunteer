@@ -1,7 +1,6 @@
 package com.hhong.Volunteer.unit;
 
 import com.hhong.Volunteer.TestConfig;
-import com.hhong.Volunteer.models.Profile;
 import com.hhong.Volunteer.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.hhong.Volunteer.services.UserService;
@@ -35,24 +34,11 @@ public class UserTest {
     }
 
     /**
-     * helper to make a profile
-     */
-    private Profile createProfile() {
-        return new Profile("Hunter", "Hong", "Coder");
-    }
-
-    private Profile createProfile(String first, String last, String bio) {
-        return new Profile(first, last, bio);
-    }
-
-    /**
      * helper to make a user
      */
     private User createUser() {
-        Profile profile = createProfile();
         User user = new User();
         user.setPhoneNumber("5253932000");
-        user.setProfile(profile);
 
         return user;
     }

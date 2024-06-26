@@ -2,7 +2,6 @@ package com.hhong.Volunteer.api;
 
 import com.hhong.Volunteer.TestConfig;
 import com.hhong.Volunteer.common.TestUtils;
-import com.hhong.Volunteer.models.Profile;
 import com.hhong.Volunteer.models.User;
 import com.hhong.Volunteer.services.UserService;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,10 +33,9 @@ public class UserAPITest {
      * helper to make a user
      */
     private User createUser() {
-        Profile profile = new Profile("Hunter", "Hong", "Coder");
         User user = new User();
         user.setPhoneNumber("5253932000");
-        user.setProfile(profile);
+        user.setFirst("Hunter");
 
         return user;
     }
@@ -140,8 +138,7 @@ public class UserAPITest {
 
         User user2 = createUser();
         user2.setPhoneNumber("5253932000");
-        Profile profile = new Profile("NotHunter", "Hong", "Bio");
-        user2.setProfile(profile);
+        user2.setFirst("NotHunter");
 
         try {
             mvc.perform(put("/api/v1/users/5253932000").contentType(MediaType.APPLICATION_JSON)
