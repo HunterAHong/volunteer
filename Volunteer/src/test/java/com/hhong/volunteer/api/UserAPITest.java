@@ -83,6 +83,7 @@ public class UserAPITest {
                 .content(TestUtils.asJsonString(user)));
 
         Assertions.assertEquals(1, service.count());
+        Assertions.assertEquals(service.findByPhoneNumber("5253932000").getFirst(), "Hunter");
     }
 
     /**
