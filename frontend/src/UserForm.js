@@ -1,7 +1,41 @@
 import React from 'react'
+import { useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 
-const UserForm = ({ name, setName, number, setNumber, handleSubmit }) => {
+const UserForm = ({ API_URL }) => {
+  const [name, setName] = useState('')
+  const [number, setNumber] = useState('')
+
+  const phoneNumber = number
+  const first = name
+  // for obj passed into POST, needs fields to match obj in backend exactly
+  const user = {phoneNumber, first};
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!name) return
+    if (!number) return
+    console.log(name)
+    console.log(number)
+    console.log("User obj")
+    console.log(user)
+    console.log(JSON.stringify(user))
+    try {
+      fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user)
+      })
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+    // setting the state of the input box back to empty
+    setName('')
+    setNumber('')
+  }
+  
   return (
     // event is implicitly passed with onSubmit
     <form className='userForm' onSubmit={handleSubmit}>
