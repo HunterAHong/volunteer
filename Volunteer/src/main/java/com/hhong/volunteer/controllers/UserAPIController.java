@@ -96,12 +96,37 @@ public class UserAPIController extends APIController {
         final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
         if (null == user) {
             return new ResponseEntity(
-                    errorResponse("No User found for name " + phoneNumber.trim().toLowerCase()),
+                    errorResponse("No User found for phone number " + phoneNumber.trim().toLowerCase()),
                     HttpStatus.NOT_FOUND);
         }
         service.delete(user);
 
         return new ResponseEntity(successResponse(user.getPhoneNumber() + " was deleted successfully"),
                 HttpStatus.OK);
+    }
+
+    @GetMapping("/matches/{phoneNumber}")
+    public ResponseEntity getMatches(@PathVariable final String phoneNumber) {
+        final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
+        if (null == user) {
+            return new ResponseEntity(
+                    errorResponse("No User found for phone number " + phoneNumber.trim().toLowerCase()),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity(user.getMatches(), HttpStatus.OK);
+    }
+
+    @PutMapping("/matches/{phoneNumber}")
+    public ResponseEntity addMatch(@PathVariable final String phoneNumber, @RequestBody final String matchPhoneNumber) {
+        final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
+        if (null == user) {
+            return new ResponseEntity(
+                    errorResponse("No User found for phone number " + phoneNumber.trim().toLowerCase()),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        user.addMatch(matchPhoneNumber);
+        return new ResponseEntity(successResponse(matchPhoneNumber + " was added successfully"), HttpStatus.OK);
     }
 }

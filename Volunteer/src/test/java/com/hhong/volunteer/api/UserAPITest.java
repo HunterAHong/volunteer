@@ -19,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = TestConfig.class)
@@ -147,6 +149,52 @@ public class UserAPITest {
             String newUser = mvc.perform(get("/api/v1/users/5253932000")).andExpect(status().isOk())
                     .andReturn().getResponse().getContentAsString();
             Assertions.assertTrue(newUser.contains("NotHunter"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    @Transactional
+    public void testAddMatch() {
+        final User user = createUser();
+        service.save(user);
+
+        try {
+            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString("2067795046"))).andExpect(status().isOk());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    @Transactional
+    public void testGetMatches() {
+        final User user = createUser();
+        service.save(user);
+
+        try {
+            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString("2067795046"))).andExpect(status().isOk());
+            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString("2063000000"))).andExpect(status().isOk());
+            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString("2063111111"))).andExpect(status().isOk());
+            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString("2063222222"))).andExpect(status().isOk());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail();
+        }
+
+        try {
+           String matches = mvc.perform(get("/api/v1/matches/5253932000")).andExpect(status().isOk())
+                    .andReturn().getResponse().getContentAsString();
+           System.out.println(matches);
+           Assertions.assertTrue(matches.contains("2067795046") && matches.contains("2063222222"));
         } catch (Exception e) {
             e.printStackTrace();
             Assertions.fail();
