@@ -81,6 +81,14 @@ public class User extends DomainObject {
         this.matches.add(match);
     }
 
+    public boolean deleteMatch(String match) {
+        if (matches.contains(match)) {
+            this.matches.remove(match);
+            return true;
+        }
+        return false;
+    }
+
     public void editUser(User editedUser) {
         this.phoneNumber = editedUser.getPhoneNumber();
         this.bio = editedUser.getBio();

@@ -129,4 +129,20 @@ public class UserAPIController extends APIController {
         user.addMatch(matchPhoneNumber);
         return new ResponseEntity(successResponse(matchPhoneNumber + " was added successfully"), HttpStatus.OK);
     }
+
+    @DeleteMapping("/matches/{phoneNumber}")
+    public ResponseEntity deleteMatch(@PathVariable final String phoneNumber, @RequestBody final String matchPhoneNumber) {
+        final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
+        if (null == user) {
+            return new ResponseEntity(
+                    errorResponse("No User found for phone number " + phoneNumber.trim().toLowerCase()),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        boolean bool = user.deleteMatch(matchPhoneNumber);
+        if (bool) {
+            return new ResponseEntity(successResponse(matchPhoneNumber + " was deleted successfully"), HttpStatus.OK);
+        }
+        return new  ResponseEntity(errorResponse("Could not find " + matchPhoneNumber), HttpStatus.NOT_FOUND);
+    }
 }
