@@ -1,14 +1,16 @@
-import Content from './Content';
-import Header from './Header';
-import UserForm from './UserForm';
 import Navbar from "./components/Navbar";
+import Signup from './components/Signup';
 import Home from "./pages/Home";
 import Matches from "./pages/Matches";
 import Events from "./pages/Events";
 import Profile from "./pages/Profile";
+import Login from './pages/Login';
+import ForgotPassword from "./pages/ForgotPassword";
+import UpdateProfile from "./pages/UpdateProfile";
 
-import { useState, useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
+import { AuthProvider } from './contexts/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   const API_URL = "http://localhost:8080/api/v1/users"
@@ -21,13 +23,20 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar/>
-      <Routes>
-        <Route path="/" element={<Home API_URL={API_URL}/>}/>
-        <Route path="/matches" element={<Matches API_URL={API_URL}/>}/>
-        <Route path="/events" element={<Events/>}/>
-        <Route path="/profile" element={<Profile/>}/>
-      </Routes>
+      <Navbar />
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<PrivateRoute><Home API_URL={API_URL} /></PrivateRoute>} />
+          <Route path="/update-profile" element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
+          <Route path="/matches" element={<Matches API_URL={API_URL} />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        </Routes>
+      </AuthProvider>
     </div>
   );
 }
