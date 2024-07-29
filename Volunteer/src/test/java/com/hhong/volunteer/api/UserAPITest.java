@@ -185,6 +185,8 @@ public class UserAPITest {
                     .content(TestUtils.asJsonString("2063111111"))).andExpect(status().isOk());
             mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtils.asJsonString("2063222222"))).andExpect(status().isOk());
+
+            Assertions.assertEquals(4, user.getMatches().size());
         } catch (Exception e) {
             e.printStackTrace();
             Assertions.fail();
