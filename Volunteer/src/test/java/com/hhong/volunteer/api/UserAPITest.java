@@ -36,7 +36,7 @@ public class UserAPITest {
      */
     private User createUser() {
         User user = new User();
-        user.setPhoneNumber("5253932000");
+        user.setEmail("5253932000");
         user.setFirst("Hunter");
 
         return user;
@@ -63,7 +63,7 @@ public class UserAPITest {
         service.deleteAll();
 
         final User user = createUser();
-        Assertions.assertNotNull(user.getPhoneNumber());
+        Assertions.assertNotNull(user.getEmail());
 
         mvc.perform(post("/api/v1/users").contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtils.asJsonString(user))).andExpect(status().isOk());
@@ -85,7 +85,7 @@ public class UserAPITest {
                 .content(TestUtils.asJsonString(user)));
 
         Assertions.assertEquals(1, service.count());
-        Assertions.assertEquals(service.findByPhoneNumber("5253932000").getFirst(), "Hunter");
+        Assertions.assertEquals(service.findByEmail("5253932000").getFirst(), "Hunter");
     }
 
     /**
@@ -140,7 +140,7 @@ public class UserAPITest {
         service.save(user);
 
         User user2 = createUser();
-        user2.setPhoneNumber("5253932000");
+        user2.setEmail("5253932000");
         user2.setFirst("NotHunter");
 
         try {
