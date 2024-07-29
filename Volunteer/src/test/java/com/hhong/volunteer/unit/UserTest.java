@@ -38,7 +38,7 @@ public class UserTest {
      */
     private User createUser() {
         User user = new User();
-        user.setPhoneNumber("5253932000");
+        user.setEmail("5253932000");
 
         return user;
     }

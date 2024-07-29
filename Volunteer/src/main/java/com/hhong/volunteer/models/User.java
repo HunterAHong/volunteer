@@ -11,19 +11,19 @@ public class User extends DomainObject {
     @GeneratedValue
     private Long id;
 
-    private String phoneNumber;
+    private String email;
     private String first;
     private String last;
     private String bio;
     private ArrayList<String> matches;
 
     public User() {
-        this.phoneNumber = "";
+        this.email = "";
         this.matches = new ArrayList<>();
     }
-    public User(String phoneNumber) {
+    public User(String email) {
         super();
-        this.phoneNumber = phoneNumber;
+        this.email = email;
     }
 
     /**
@@ -41,12 +41,12 @@ public class User extends DomainObject {
         return null;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getEmail() {
+        return email;
     }
 
     public String getBio() {
@@ -90,7 +90,7 @@ public class User extends DomainObject {
     }
 
     public void editUser(User editedUser) {
-        this.phoneNumber = editedUser.getPhoneNumber();
+        this.email = editedUser.getEmail();
         this.bio = editedUser.getBio();
         this.last = editedUser.getLast();
         this.first = editedUser.getFirst();
@@ -101,19 +101,19 @@ public class User extends DomainObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(first, user.first) && Objects.equals(last, user.last) && Objects.equals(bio, user.bio);
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(first, user.first) && Objects.equals(last, user.last) && Objects.equals(bio, user.bio);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, phoneNumber, first, last, bio);
+        return Objects.hash(id, email, first, last, bio);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
                 ", first='" + first + '\'' +
                 ", last='" + last + '\'' +
                 ", bio='" + bio + '\'' +

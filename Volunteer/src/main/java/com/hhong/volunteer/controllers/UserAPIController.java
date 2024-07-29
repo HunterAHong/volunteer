@@ -34,15 +34,15 @@ public class UserAPIController extends APIController {
      * REST API method to provide GET access to a specific User, as indicated by the path variable
      * provided (the phone number of the User desired).
      *
-     * @param phoneNumber User phoneNumber
+     * @param email User email
      * @return response to the request
      */
-    @GetMapping("/users/{phoneNumber}")
-    public ResponseEntity getUser(@PathVariable("phoneNumber") final String phoneNumber) {
-        final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
+    @GetMapping("/users/{email}")
+    public ResponseEntity getUser(@PathVariable("email") final String email) {
+        final User user = service.findByEmail(email.trim().toLowerCase());
         return null == user
                 ? new ResponseEntity(
-                errorResponse("No User found with name " + phoneNumber.trim().toLowerCase()),
+                errorResponse("No User found with name " + email.trim().toLowerCase()),
                 HttpStatus.NOT_FOUND)
                 : new ResponseEntity(user, HttpStatus.OK);
     }
@@ -58,15 +58,15 @@ public class UserAPIController extends APIController {
      */
     @PostMapping("/users")
     public ResponseEntity createUser(@RequestBody final User user) {
-        if (null != service.findByPhoneNumber(user.getPhoneNumber().trim().toLowerCase())) {
-            return new ResponseEntity(errorResponse("User with the phone number "
-                    + user.getPhoneNumber().trim().toLowerCase() + " already exists"),
+        if (null != service.findByEmail(user.getEmail().trim().toLowerCase())) {
+            return new ResponseEntity(errorResponse("User with the email "
+                    + user.getEmail().trim().toLowerCase() + " already exists"),
                     HttpStatus.CONFLICT);
         } else {
             // makes sure phone number is trimmed before entering into database
-            user.setPhoneNumber(user.getPhoneNumber().trim().toLowerCase());
+            user.setEmail(user.getEmail().trim().toLowerCase());
             service.save(user);
-            return new ResponseEntity(successResponse(user.getPhoneNumber() + " successfully created"),
+            return new ResponseEntity(successResponse(user.getEmail() + " successfully created"),
                     HttpStatus.OK);
         }
     }
@@ -79,7 +79,7 @@ public class UserAPIController extends APIController {
      */
     @PutMapping("/users/{name}")
     public ResponseEntity editUser(@RequestBody final User user) {
-        final User dbUser = service.findByPhoneNumber(user.getPhoneNumber());
+        final User dbUser = service.findByEmail(user.getEmail());
         dbUser.editUser(user);
         service.save(dbUser);
         return new ResponseEntity(dbUser, HttpStatus.OK);
@@ -88,61 +88,61 @@ public class UserAPIController extends APIController {
     /**
      * REST API method to allow deleting a User.
      *
-     * @param phoneNumber The phone number of the User to delete
+     * @param email The phone number of the User to delete
      * @return Success if the User could be deleted; an error if the User does not exist
      */
-    @DeleteMapping("/users/{phoneNumber}")
-    public ResponseEntity deleteUser(@PathVariable final String phoneNumber) {
-        final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
+    @DeleteMapping("/users/{email}")
+    public ResponseEntity deleteUser(@PathVariable final String email) {
+        final User user = service.findByEmail(email.trim().toLowerCase());
         if (null == user) {
             return new ResponseEntity(
-                    errorResponse("No User found for phone number " + phoneNumber.trim().toLowerCase()),
+                    errorResponse("No User found for phone number " + email.trim().toLowerCase()),
                     HttpStatus.NOT_FOUND);
         }
         service.delete(user);
 
-        return new ResponseEntity(successResponse(user.getPhoneNumber() + " was deleted successfully"),
+        return new ResponseEntity(successResponse(user.getEmail() + " was deleted successfully"),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/matches/{phoneNumber}")
-    public ResponseEntity getMatches(@PathVariable final String phoneNumber) {
-        final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
+    @GetMapping("/matches/{email}")
+    public ResponseEntity getMatches(@PathVariable final String email) {
+        final User user = service.findByEmail(email.trim().toLowerCase());
         if (null == user) {
             return new ResponseEntity(
-                    errorResponse("No User found for phone number " + phoneNumber.trim().toLowerCase()),
+                    errorResponse("No User found for phone number " + email.trim().toLowerCase()),
                     HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity(user.getMatches(), HttpStatus.OK);
     }
 
-    @PutMapping("/matches/{phoneNumber}")
-    public ResponseEntity addMatch(@PathVariable final String phoneNumber, @RequestBody final String matchPhoneNumber) {
-        final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
+    @PutMapping("/matches/{email}")
+    public ResponseEntity addMatch(@PathVariable final String email, @RequestBody final String matchEmail) {
+        final User user = service.findByEmail(email.trim().toLowerCase());
         if (null == user) {
             return new ResponseEntity(
-                    errorResponse("No User found for phone number " + phoneNumber.trim().toLowerCase()),
+                    errorResponse("No User found for phone number " + email.trim().toLowerCase()),
                     HttpStatus.NOT_FOUND);
         }
 
-        user.addMatch(matchPhoneNumber);
-        return new ResponseEntity(successResponse(matchPhoneNumber + " was added successfully"), HttpStatus.OK);
+        user.addMatch(matchEmail);
+        return new ResponseEntity(successResponse(matchEmail + " was added successfully"), HttpStatus.OK);
     }
 
-    @DeleteMapping("/matches/{phoneNumber}")
-    public ResponseEntity deleteMatch(@PathVariable final String phoneNumber, @RequestBody final String matchPhoneNumber) {
-        final User user = service.findByPhoneNumber(phoneNumber.trim().toLowerCase());
+    @DeleteMapping("/matches/{email}")
+    public ResponseEntity deleteMatch(@PathVariable final String email, @RequestBody final String matchEmail) {
+        final User user = service.findByEmail(email.trim().toLowerCase());
         if (null == user) {
             return new ResponseEntity(
-                    errorResponse("No User found for phone number " + phoneNumber.trim().toLowerCase()),
+                    errorResponse("No User found for phone number " + email.trim().toLowerCase()),
                     HttpStatus.NOT_FOUND);
         }
 
-        boolean bool = user.deleteMatch(matchPhoneNumber);
+        boolean bool = user.deleteMatch(matchEmail);
         if (bool) {
-            return new ResponseEntity(successResponse(matchPhoneNumber + " was deleted successfully"), HttpStatus.OK);
+            return new ResponseEntity(successResponse(matchEmail + " was deleted successfully"), HttpStatus.OK);
         }
-        return new  ResponseEntity(errorResponse("Could not find " + matchPhoneNumber), HttpStatus.NOT_FOUND);
+        return new  ResponseEntity(errorResponse("Could not find " + matchEmail), HttpStatus.NOT_FOUND);
     }
 }
