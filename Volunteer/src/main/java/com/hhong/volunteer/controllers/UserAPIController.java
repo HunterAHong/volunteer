@@ -114,6 +114,9 @@ public class UserAPIController extends APIController {
                     HttpStatus.NOT_FOUND);
         }
 
+        System.out.println(user.getMatches());
+        System.out.println("RESPONSE ENTITY:" + new ResponseEntity(user.getMatches(), HttpStatus.OK));
+
         return new ResponseEntity(user.getMatches(), HttpStatus.OK);
     }
 
@@ -127,7 +130,10 @@ public class UserAPIController extends APIController {
         }
 
         user.addMatch(matchEmail);
-        return new ResponseEntity(successResponse(matchEmail + " was added successfully"), HttpStatus.OK);
+        System.out.println(user.getMatches());
+        service.save(user);
+
+        return new ResponseEntity(user.getMatches(), HttpStatus.OK);
     }
 
     @DeleteMapping("/matches/{email}")

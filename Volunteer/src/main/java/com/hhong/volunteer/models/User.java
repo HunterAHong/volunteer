@@ -3,6 +3,7 @@ package com.hhong.Volunteer.models;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,7 +16,8 @@ public class User extends DomainObject {
     private String first;
     private String last;
     private String bio;
-    private ArrayList<String> matches;
+
+    private List<String> matches;
 
     public User() {
         this.email = "";
@@ -73,7 +75,7 @@ public class User extends DomainObject {
         this.first = first;
     }
 
-    public ArrayList<String> getMatches() {
+    public List<String> getMatches() {
         return this.matches;
     }
 

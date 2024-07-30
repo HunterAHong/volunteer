@@ -85,7 +85,7 @@ public class UserTest {
         user.addMatch("match 1");
         user.addMatch("match 2");
 
-        ArrayList<String> matches = user.getMatches();
+        List<String> matches = user.getMatches();
         Assertions.assertEquals(2, matches.size());
         Assertions.assertEquals("match 1", matches.get(0));
     }
