@@ -7,10 +7,46 @@ export default function UpdateProfile() {
     const emailRef = useRef()
     const passwordRef = useRef()
     const passwordConfirmRef = useRef()
+    const firstRef = useRef()
+    const lastRef = useRef()
     const { currentUser, updateEmail, updatePassword } = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+
+    async function getUser(email) {
+        //fetch user based on email
+        //translate from json to obj
+        try {
+            const userResponse = await fetch("http://localhost:8080/api/v1/users/" + currentUser.email)
+            const user = await userResponse.json()
+            return user
+        } catch (err) {
+            console.log(err.stack)
+        }
+    }
+
+    async function updateUser(email, first, last) {
+        const user = await getUser(email)
+        if (first && last) {
+            //insert first and last into the obj
+            user.first = first
+            user.last = last
+        } else if (first) {
+            user.first = first
+        } else if (last) {
+            user.last = last
+        }
+
+        // PUT user
+        await fetch("http://localhost:8080/api/v1/users/" + email, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user)
+        })
+    }
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -28,6 +64,9 @@ export default function UpdateProfile() {
         }
         if (passwordRef.current.value) {
             promises.push(updatePassword(passwordRef.current.value))
+        }
+        if (firstRef.current.value || lastRef.current.value) {
+            promises.push(updateUser(currentUser.email, firstRef.current.value, lastRef.current.value))
         }
 
         Promise.all(promises).then(() => {
@@ -54,6 +93,16 @@ export default function UpdateProfile() {
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control type="email" ref={emailRef} required
                                     defaultValue={currentUser.email} />
+                            </Form.Group>
+                            <Form.Group id="first">
+                                <Form.Label>First Name</Form.Label>
+                                <Form.Control ref={firstRef}
+                                    placeholder='Leave blank to keep the same' />
+                            </Form.Group>
+                            <Form.Group id="last">
+                                <Form.Label>Last Name</Form.Label>
+                                <Form.Control ref={lastRef}
+                                    placeholder='Leave blank to keep the same' />
                             </Form.Group>
                             <Form.Group id="password">
                                 <Form.Label>Password</Form.Label>
