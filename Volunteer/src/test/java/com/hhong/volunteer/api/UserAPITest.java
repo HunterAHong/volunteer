@@ -160,10 +160,13 @@ public class UserAPITest {
     public void testAddMatch() {
         final User user = createUser();
         service.save(user);
+        User match = createUser();
+        match.setEmail("match.match.com");
+        service.save(match);
 
         try {
             mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtils.asJsonString("2067795046"))).andExpect(status().isOk());
+                    .content(TestUtils.asJsonString(match))).andExpect(status().isOk());
         } catch (Exception e) {
             e.printStackTrace();
             Assertions.fail();
@@ -175,18 +178,20 @@ public class UserAPITest {
     public void testGetMatches() {
         final User user = createUser();
         service.save(user);
+        User match = createUser();
+        match.setEmail("boo@boo.com");
+        User match2 = createUser();
+        match2.setEmail("ahh@ahh.com");
+        service.save(match);
+        service.save(match2);
 
         try {
             mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtils.asJsonString("2067795046"))).andExpect(status().isOk());
+                    .content(TestUtils.asJsonString(match))).andExpect(status().isOk());
             mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtils.asJsonString("2063000000"))).andExpect(status().isOk());
-            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtils.asJsonString("2063111111"))).andExpect(status().isOk());
-            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtils.asJsonString("2063222222"))).andExpect(status().isOk());
+                    .content(TestUtils.asJsonString(match2))).andExpect(status().isOk());
 
-            Assertions.assertEquals(4, user.getMatches().size());
+            Assertions.assertEquals(2, user.getMatches().size());
         } catch (Exception e) {
             e.printStackTrace();
             Assertions.fail();
@@ -195,7 +200,7 @@ public class UserAPITest {
         try {
            String matches = mvc.perform(get("/api/v1/matches/5253932000")).andExpect(status().isOk())
                     .andReturn().getResponse().getContentAsString();
-           Assertions.assertTrue(matches.contains("2067795046") && matches.contains("2063222222"));
+           Assertions.assertTrue(matches.contains("boo@boo.com") && matches.contains("ahh@ahh.com"));
         } catch (Exception e) {
             e.printStackTrace();
             Assertions.fail();
@@ -207,15 +212,18 @@ public class UserAPITest {
     public void testDeleteMatch() {
         final User user = createUser();
         service.save(user);
+        User match = createUser();
+        match.setEmail("boo@boo.com");
+        User match2 = createUser();
+        match2.setEmail("ahh@ahh.com");
+        service.save(match);
+        service.save(match2);
+
         try {
             mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtils.asJsonString("2067795046"))).andExpect(status().isOk());
+                    .content(TestUtils.asJsonString(match))).andExpect(status().isOk());
             mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtils.asJsonString("2063000000"))).andExpect(status().isOk());
-            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtils.asJsonString("2063111111"))).andExpect(status().isOk());
-            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtils.asJsonString("2063222222"))).andExpect(status().isOk());
+                    .content(TestUtils.asJsonString(match2))).andExpect(status().isOk());
         } catch (Exception e) {
             e.printStackTrace();
             Assertions.fail();
@@ -223,14 +231,12 @@ public class UserAPITest {
 
         try {
             mvc.perform(delete("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                            .content(TestUtils.asJsonString("2063000000"))).andExpect(status().isOk());
-            mvc.perform(delete("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtils.asJsonString("2063111111"))).andExpect(status().isOk());
+                            .content(TestUtils.asJsonString("boo@boo.com"))).andExpect(status().isOk());
 
             String matches = mvc.perform(get("/api/v1/matches/5253932000")).andExpect(status().isOk())
                     .andReturn().getResponse().getContentAsString();
-            Assertions.assertTrue(matches.contains("2067795046") && matches.contains("2063222222"));
-            Assertions.assertFalse(matches.contains("2063000000") && matches.contains("2063111111"));
+            Assertions.assertTrue(matches.contains("ahh@ahh.com"));
+            Assertions.assertFalse(matches.contains("boo@boo.com"));
         } catch (Exception e) {
             e.printStackTrace();
             Assertions.fail();

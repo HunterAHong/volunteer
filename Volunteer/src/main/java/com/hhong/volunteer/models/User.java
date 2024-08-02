@@ -17,7 +17,8 @@ public class User extends DomainObject {
     private String last;
     private String bio;
 
-    private List<String> matches;
+    @OneToMany
+    private List<User> matches;
 
     public User() {
         this.email = "";
@@ -75,18 +76,20 @@ public class User extends DomainObject {
         this.first = first;
     }
 
-    public List<String> getMatches() {
+    public List<User> getMatches() {
         return this.matches;
     }
 
-    public void addMatch(String match) {
+    public void addMatch(User match) {
         this.matches.add(match);
     }
 
-    public boolean deleteMatch(String match) {
-        if (matches.contains(match)) {
-            this.matches.remove(match);
-            return true;
+    public boolean deleteMatch(String matchEmail) {
+        for (int i =0; i < this.matches.size(); i++) {
+            if (this.matches.get(i).getEmail().equals(matchEmail)) {
+                this.matches.remove(i);
+                return true;
+            }
         }
         return false;
     }

@@ -81,12 +81,15 @@ public class UserTest {
         userService.save(user);
 
         Assertions.assertTrue(user.getMatches().isEmpty());
+        User match = createUser();
+        User match2 = createUser();
+        match.setEmail("boo@boo.com");
+        match.setEmail("ahh@ahh.com");
+        user.addMatch(match);
+        user.addMatch(match2);
 
-        user.addMatch("match 1");
-        user.addMatch("match 2");
-
-        List<String> matches = user.getMatches();
+        List<User> matches = user.getMatches();
         Assertions.assertEquals(2, matches.size());
-        Assertions.assertEquals("match 1", matches.get(0));
+        Assertions.assertEquals(match, matches.get(0));
     }
 }
