@@ -8,6 +8,7 @@ export default function Matches({ API_URL }) {
   const [users, setUsers] = useState([])
   const { currentUser } = useAuth()
   const [matches, setMatches] = useState([])
+  const [excludedEmails, setExcludedEmails] = useState([])
 
 
   useEffect(() => {
@@ -17,7 +18,6 @@ export default function Matches({ API_URL }) {
         const response = await fetch(API_URL)
         const userList = await response.json()
         setUsers(userList)
-
         fetchMatches()
 
       } catch (err) {
@@ -33,12 +33,20 @@ export default function Matches({ API_URL }) {
     try {
       const response = await fetch("http://localhost:8080/api/v1/matches/" + currentUser.email)
       const currentMatches = await response.json()
-      console.log("Matches fetched: " + currentMatches)
       setMatches(currentMatches)
     } catch (err) {
       console.log(err.stack)
     }
   }
+
+  useEffect(() => {
+    //on matches state change, then changes excluded
+    if (matches.length > 0) {
+      for (let i = 0; i < matches.length; i++) {
+        setExcludedEmails(excludedEmails => [...excludedEmails, matches[i].email])
+      }
+    }
+  }, [matches])
 
   const getUser = async (email) => {
     try {
@@ -50,6 +58,12 @@ export default function Matches({ API_URL }) {
     }
   }
 
+  const removeEmail = (emailToRemove) => {
+    setExcludedEmails(prevExcludedEmails =>
+      prevExcludedEmails.filter(email => email !== emailToRemove)
+    )
+  }
+
   const addMatch = async (email) => {
     // put match
     await fetch("http://localhost:8080/api/v1/matches/" + currentUser.email, {
@@ -59,7 +73,7 @@ export default function Matches({ API_URL }) {
       },
       body: email
     })
-    setMatches([...matches],)
+    setExcludedEmails([...excludedEmails, email])
     fetchMatches()
   }
 
@@ -71,15 +85,17 @@ export default function Matches({ API_URL }) {
       },
       body: email
     })
-
+    removeEmail(email)
     fetchMatches()
   }
+
+  const filteredUsers = users.filter(user => !excludedEmails.includes(user.email))
 
   return (
     <main>
       <h1>Matches</h1>
       <div>
-        {users.map(user => (
+        {filteredUsers.map(user => (
           <div key={user.email}>{user.first} {user.last}
             <button onClick={() => addMatch(user.email)}
               title='Match'
