@@ -18,9 +18,6 @@ export default function Matches({ API_URL }) {
         const userList = await response.json()
         setUsers(userList)
 
-        const userResponse = await fetch(API_URL + "/palid2@outlook.com")
-        const user = await userResponse.json()
-
         fetchMatches()
 
       } catch (err) {
@@ -35,24 +32,33 @@ export default function Matches({ API_URL }) {
   const fetchMatches = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/v1/matches/" + currentUser.email)
-      setMatches(await response.json())
+      const currentMatches = await response.json()
+      setMatches(currentMatches)
+    } catch (err) {
+      console.log(err.stack)
+    }
+  }
 
+  const getUser = async (email) => {
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/users/" + email)
+      const user = await response.json()
+      return user
     } catch (err) {
       console.log(err.stack)
     }
   }
 
   const addMatch = async (email) => {
+    console.log("email of match: " + email)
     // put match
     const response = fetch("http://localhost:8080/api/v1/matches/" + currentUser.email, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(email)
+      body: email
     })
-
-    console.log((await response).type)
 
     fetchMatches()
   }
@@ -67,6 +73,7 @@ export default function Matches({ API_URL }) {
       body: JSON.stringify(email)
     })
 
+    console.log(response)
     fetchMatches()
 
     console.log((await response).json)
@@ -77,7 +84,7 @@ export default function Matches({ API_URL }) {
       <h1>Matches</h1>
       <div>
         {users.map(user => (
-          <div key={user.id}>{user.first} {user.last}
+          <div key={user.email}>{user.first} {user.last}
             <button onClick={() => addMatch(user.email)}
               title='Match'
               type='submit'
@@ -93,13 +100,14 @@ export default function Matches({ API_URL }) {
             </h5>
 
             <p>
-              {matches.map(match => (<ul><li>{match}</li>
-                <button onClick={() => removeMatch(match)}
-                  title='Match'
-                  type='submit'
-                  aria-label='Enter Name'
-                ><FaMinus /></button>
-              </ul>))}
+              {matches.map(match => (
+                <div key={match.email}>{match.first} {match.last}
+                  <button onClick={() => removeMatch(match.email)}
+                    title='Match'
+                    type='submit'
+                    aria-label='Enter Name'
+                  ><FaMinus /></button>
+                </div>))}
             </p>
           </Card.Body>
         </Card>
