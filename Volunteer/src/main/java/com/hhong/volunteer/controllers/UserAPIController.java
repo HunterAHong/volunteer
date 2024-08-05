@@ -151,7 +151,8 @@ public class UserAPIController extends APIController {
                     HttpStatus.NOT_FOUND);
         }
 
-        boolean bool = user.deleteMatch(matchEmail.substring(1, matchEmail.length()-1));
+        boolean bool = user.deleteMatch(matchEmail.trim().toLowerCase());
+        service.save(user);
         if (bool) {
             return new ResponseEntity(successResponse(matchEmail + " was deleted successfully"), HttpStatus.OK);
         }

@@ -50,9 +50,8 @@ export default function Matches({ API_URL }) {
   }
 
   const addMatch = async (email) => {
-    console.log("email of match: " + email)
     // put match
-    const response = fetch("http://localhost:8080/api/v1/matches/" + currentUser.email, {
+    fetch("http://localhost:8080/api/v1/matches/" + currentUser.email, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -64,19 +63,15 @@ export default function Matches({ API_URL }) {
   }
 
   const removeMatch = async (email) => {
-    console.log(email)
-    const response = fetch("http://localhost:8080/api/v1/matches/" + currentUser.email, {
+    fetch("http://localhost:8080/api/v1/matches/" + currentUser.email, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(email)
+      body: email
     })
 
-    console.log(response)
     fetchMatches()
-
-    console.log((await response).json)
   }
 
   return (
