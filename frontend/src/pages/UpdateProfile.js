@@ -9,6 +9,8 @@ export default function UpdateProfile() {
     const passwordConfirmRef = useRef()
     const firstRef = useRef()
     const lastRef = useRef()
+    const cityRef = useRef()
+    const stateRef = useRef()
     const { currentUser, updateEmail, updatePassword } = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
@@ -26,16 +28,19 @@ export default function UpdateProfile() {
         }
     }
 
-    async function updateUser(email, first, last) {
+    async function updateUser(email, first, last, city, state) {
         const user = await getUser(email)
-        if (first && last) {
-            //insert first and last into the obj
+        if (first) {
             user.first = first
+        }
+        if (last) {
             user.last = last
-        } else if (first) {
-            user.first = first
-        } else if (last) {
-            user.last = last
+        }
+        if (city) {
+            user.city = city
+        }
+        if (state) {
+            user.state = state
         }
 
         // PUT user
@@ -65,8 +70,10 @@ export default function UpdateProfile() {
         if (passwordRef.current.value) {
             promises.push(updatePassword(passwordRef.current.value))
         }
-        if (firstRef.current.value || lastRef.current.value) {
-            promises.push(updateUser(currentUser.email, firstRef.current.value, lastRef.current.value))
+        if (firstRef.current.value || lastRef.current.value || cityRef.current.value
+            || stateRef.current.value) {
+            promises.push(updateUser(currentUser.email, firstRef.current.value, lastRef.current.value,
+                cityRef.current.value, stateRef.current.value))
         }
 
         Promise.all(promises).then(() => {
@@ -102,6 +109,16 @@ export default function UpdateProfile() {
                             <Form.Group id="last">
                                 <Form.Label>Last Name</Form.Label>
                                 <Form.Control ref={lastRef}
+                                    placeholder='Leave blank to keep the same' />
+                            </Form.Group>
+                            <Form.Group id="city">
+                                <Form.Label>City</Form.Label>
+                                <Form.Control ref={cityRef}
+                                    placeholder='Leave blank to keep the same' />
+                            </Form.Group>
+                            <Form.Group id="state">
+                                <Form.Label>State</Form.Label>
+                                <Form.Control ref={stateRef}
                                     placeholder='Leave blank to keep the same' />
                             </Form.Group>
                             <Form.Group id="password">

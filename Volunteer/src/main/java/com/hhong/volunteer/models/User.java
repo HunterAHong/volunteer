@@ -16,6 +16,8 @@ public class User extends DomainObject {
     private String first;
     private String last;
     private String bio;
+    private String city;
+    private String state;
 
     @OneToMany
     private List<User> matches;
@@ -76,6 +78,22 @@ public class User extends DomainObject {
         this.first = first;
     }
 
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
     public List<User> getMatches() {
         return this.matches;
     }
@@ -99,6 +117,8 @@ public class User extends DomainObject {
         this.bio = editedUser.getBio();
         this.last = editedUser.getLast();
         this.first = editedUser.getFirst();
+        this.state = editedUser.getState();
+        this.city = editedUser.getCity();
     }
 
     @Override
@@ -106,12 +126,12 @@ public class User extends DomainObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(first, user.first) && Objects.equals(last, user.last) && Objects.equals(bio, user.bio);
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(first, user.first) && Objects.equals(last, user.last) && Objects.equals(bio, user.bio) && Objects.equals(city, user.city) && Objects.equals(state, user.state) && Objects.equals(matches, user.matches);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, first, last, bio);
+        return Objects.hash(id, email, first, last, bio, city, state, matches);
     }
 
     @Override
@@ -122,6 +142,9 @@ public class User extends DomainObject {
                 ", first='" + first + '\'' +
                 ", last='" + last + '\'' +
                 ", bio='" + bio + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", matches=" + matches +
                 '}';
     }
 }
