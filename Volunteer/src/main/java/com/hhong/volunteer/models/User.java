@@ -18,6 +18,7 @@ public class User extends DomainObject {
     private String bio;
     private String city;
     private String state;
+    private boolean isVolunteer;
 
     @OneToMany
     private List<User> matches;
@@ -94,6 +95,14 @@ public class User extends DomainObject {
         return state;
     }
 
+    public boolean isVolunteer() {
+        return isVolunteer;
+    }
+
+    public void setVolunteer(boolean volunteer) {
+        isVolunteer = volunteer;
+    }
+
     public List<User> getMatches() {
         return this.matches;
     }
@@ -119,6 +128,7 @@ public class User extends DomainObject {
         this.first = editedUser.getFirst();
         this.state = editedUser.getState();
         this.city = editedUser.getCity();
+        this.isVolunteer = editedUser.isVolunteer();
     }
 
     @Override
