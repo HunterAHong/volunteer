@@ -24,6 +24,7 @@ export default function ProfilePicture() {
         console.log(auth.currentUser.photoURL)
         if (auth.currentUser?.photoURL) {
             setPhotoURL(auth.currentUser.photoURL)
+            console.log(auth.currentUser.photoURL)
         }
     }, [currentUser])
 

@@ -68,7 +68,7 @@ export function AuthProvider({ children }) {
 }
 
 export async function upload(file, currentUser, setLoading) {
-    const fileRef = ref(storage, auth.currentUser.uid + '.png')
+    const fileRef = ref(storage, auth.currentUser.email + '.png')
 
     setLoading(true)
     const snapshot = await uploadBytes(fileRef, file)

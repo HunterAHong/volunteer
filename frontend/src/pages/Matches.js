@@ -96,8 +96,12 @@ export default function Matches({ API_URL }) {
       <h1>Matches</h1>
       <div>
         {filteredUsers.map(user => (
-          <div key={user.email}>{user.first} {user.last}
-            <button onClick={() => addMatch(user.email)}
+          <div key={user.email}>
+            <img src={"https://firebasestorage.googleapis.com/v0/b/auth-development-15ccf.appspot.com/o/" + user.email + ".png?alt=media"}
+              alt="Avatar" className="avatar" />
+            {user.first} {user.last}
+            <br />{user.state} {user.city}
+            < button onClick={() => addMatch(user.email)}
               title='Match'
               type='submit'
               aria-label='Enter Name'
