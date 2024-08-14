@@ -16,7 +16,7 @@ export default function UpdateProfile() {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
-    async function getUser(email) {
+    async function getUser() {
         //fetch user based on email
         //translate from json to obj
         try {

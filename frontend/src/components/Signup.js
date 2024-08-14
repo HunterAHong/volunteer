@@ -19,7 +19,8 @@ export default function Signup() {
             first: null,
             last: null,
             bio: null,
-            matches: []
+            matches: [],
+            volunter: false
         }
 
         await fetch("http://localhost:8080/api/v1/users", {
