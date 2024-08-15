@@ -46,6 +46,7 @@ export default function Matches({ API_URL }) {
         setExcludedEmails(excludedEmails => [...excludedEmails, matches[i].email])
       }
     }
+
   }, [matches])
 
   const getUser = async (email) => {
@@ -100,7 +101,11 @@ export default function Matches({ API_URL }) {
             <img src={"https://firebasestorage.googleapis.com/v0/b/auth-development-15ccf.appspot.com/o/" + user.email + ".png?alt=media"}
               alt="Avatar" className="avatar" />
             {user.first} {user.last}
-            <br />{user.state} {user.city}
+            <br />
+            {user.state} {user.city}
+            <br />
+            {user.volunteer === true && <p>Volunteer</p>}
+            {user.volunteer == false && <p>Organizer</p>}
             < button onClick={() => addMatch(user.email)}
               title='Match'
               type='submit'

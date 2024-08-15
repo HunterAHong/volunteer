@@ -22,8 +22,6 @@ export default function Home({ API_URL }) {
     }
 
     async function getUser() {
-        //fetch user based on email
-        //translate from json to obj
         try {
             const userResponse = await fetch("http://localhost:8080/api/v1/users/" + currentUser.email)
             const user = await userResponse.json()
@@ -38,8 +36,6 @@ export default function Home({ API_URL }) {
         user.volunteer = !isVolunteer
         setIsVolunteer(!isVolunteer)
 
-        console.log(JSON.stringify(user))
-
         await fetch("http://localhost:8080/api/v1/users/" + currentUser.email, {
             method: 'PUT',
             headers: {
@@ -47,8 +43,6 @@ export default function Home({ API_URL }) {
             },
             body: JSON.stringify(user)
         })
-
-        console.log("switched")
     }
 
     return (
