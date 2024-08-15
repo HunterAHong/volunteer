@@ -105,7 +105,7 @@ export default function Matches({ API_URL }) {
             {user.state} {user.city}
             <br />
             {user.volunteer === true && <p>Volunteer</p>}
-            {user.volunteer == false && <p>Organizer</p>}
+            {user.volunteer === false && <p>Organizer</p>}
             < button onClick={() => addMatch(user.email)}
               title='Match'
               type='submit'

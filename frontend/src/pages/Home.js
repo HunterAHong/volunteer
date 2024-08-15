@@ -1,5 +1,5 @@
 import UserForm from "../UserForm";
-import React, { useState, Switch } from "react"
+import React, { useState, useEffect, Switch } from "react"
 import { Card, Button, Alert, Form } from 'react-bootstrap'
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +9,18 @@ export default function Home({ API_URL }) {
     const { currentUser, logout } = useAuth()
     const navigate = useNavigate()
     const [isVolunteer, setIsVolunteer] = useState(true)
+    const [isChecked, setIsChecked] = useState(false)
+
+    useEffect(() => {
+        const fetchInitialSwitchState = async () => {
+            const user = await getUser()
+            console.log("Initial user state: " + user.volunteer)
+            setIsChecked(!user.volunteer)
+        }
+
+        fetchInitialSwitchState()
+        console.log("checked " + isChecked)
+    }, [])
 
     async function handleLogout() {
         setError('')
@@ -35,6 +47,7 @@ export default function Home({ API_URL }) {
         const user = await getUser()
         user.volunteer = !isVolunteer
         setIsVolunteer(!isVolunteer)
+        setIsChecked(!isChecked)
 
         await fetch("http://localhost:8080/api/v1/users/" + currentUser.email, {
             method: 'PUT',
@@ -49,10 +62,12 @@ export default function Home({ API_URL }) {
         <main>
             <h1>Home</h1>
             <Form>
-                <Form.Check onClick={switchChange}
+                <Form.Check
+                    onChange={switchChange}
                     enabled="true"
                     type="switch"
                     id="volunteerSwitch"
+                    checked={isChecked}
                     label="Organizer Mode"
                 />
             </Form>
