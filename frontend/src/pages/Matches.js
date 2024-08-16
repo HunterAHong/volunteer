@@ -9,6 +9,7 @@ export default function Matches({ API_URL }) {
   const { currentUser } = useAuth()
   const [matches, setMatches] = useState([])
   const [excludedEmails, setExcludedEmails] = useState([])
+  const [filteredUsers, setFilteredUsers] = useState([])
 
 
   useEffect(() => {
@@ -29,15 +30,20 @@ export default function Matches({ API_URL }) {
     return () => { ignore = true }
   }, [API_URL])
 
-  const fetchMatches = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/v1/matches/" + currentUser.email)
-      const currentMatches = await response.json()
-      setMatches(currentMatches)
-    } catch (err) {
-      console.log(err.stack)
+  //on mount
+  useEffect(() => {
+    const loggedUser = getUser(currentUser.email)
+    console.log(loggedUser)
+    setExcludedEmails(currentUser.email)
+    const tempExclude = currentUser.email
+    setFilteredUsers(users.filter(user => !tempExclude.includes(user.email)))
+
+    //true is volunteer mode
+    if (loggedUser.volunteer) {
+      //filter so that only contains organizers
+      setFilteredUsers(users.filter(user => user.volunteer === false))
     }
-  }
+  }, [])
 
   useEffect(() => {
     //on matches state change, then changes excluded
@@ -48,6 +54,16 @@ export default function Matches({ API_URL }) {
     }
 
   }, [matches])
+
+  const fetchMatches = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/matches/" + currentUser.email)
+      const currentMatches = await response.json()
+      setMatches(currentMatches)
+    } catch (err) {
+      console.log(err.stack)
+    }
+  }
 
   const getUser = async (email) => {
     try {
@@ -89,8 +105,6 @@ export default function Matches({ API_URL }) {
     removeEmail(email)
     fetchMatches()
   }
-
-  const filteredUsers = users.filter(user => !excludedEmails.includes(user.email))
 
   return (
     <main>
