@@ -3,6 +3,7 @@ import React, { useState, useEffect, Switch } from "react"
 import { Card, Button, Alert, Form } from 'react-bootstrap'
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { getScopedCssBaselineUtilityClass } from "@mui/material";
 
 export default function Home({ API_URL }) {
     const [error, setError] = useState("")
@@ -15,6 +16,7 @@ export default function Home({ API_URL }) {
         const fetchInitialSwitchState = async () => {
             const user = await getUser()
             console.log("Initial user state: " + user.volunteer)
+            setIsVolunteer(user.volunteer)
             setIsChecked(!user.volunteer)
         }
 
@@ -46,9 +48,11 @@ export default function Home({ API_URL }) {
     async function switchChange() {
         const user = await getUser()
         user.volunteer = !isVolunteer
+        console.log(!isVolunteer)
+        console.log(user.volunteer)
         setIsVolunteer(!isVolunteer)
         setIsChecked(!isChecked)
-
+        console.log("switched su[[psedi;sy")
         await fetch("http://localhost:8080/api/v1/users/" + currentUser.email, {
             method: 'PUT',
             headers: {
