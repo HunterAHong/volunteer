@@ -1,40 +1,55 @@
-import React, { useEffect } from "react"
-import { useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { FaMinus, FaPlus } from 'react-icons/fa'
 import { useAuth } from '../contexts/AuthContext'
 import { Card } from "react-bootstrap"
+import { useLocation } from "react-router-dom"
 
 export default function Matches({ API_URL }) {
-  const [users, setUsers] = useState([])
   const { currentUser } = useAuth()
+  const location = useLocation()
   const [matches, setMatches] = useState([])
   const [excludedEmails, setExcludedEmails] = useState([])
   const [filteredUsers, setFilteredUsers] = useState([])
+  const [users, setUsers] = useState([])
 
+  const fetchMatches = useCallback(async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/matches/" + currentUser.email)
+      const currentMatches = await response.json()
+      setMatches(currentMatches)
+    } catch (err) {
+      console.log(err.stack)
+    }
+  }, [currentUser.email])
 
   useEffect(() => {
+    console.log(users)
+
     let ignore = false
     const fetchUsers = async () => {
       try {
         const response = await fetch(API_URL)
         const userList = await response.json()
-        setUsers(userList)
-        fetchMatches()
-
+        if (!ignore) {
+          if (JSON.stringify(users) !== JSON.stringify(userList)) {
+            setUsers(userList);
+            fetchMatches();
+          }
+        }
       } catch (err) {
         console.log(err.stack)
       }
     }
 
-    if (!ignore) fetchUsers()
-    return () => { ignore = true }
-  }, [API_URL])
+    fetchUsers();
 
-  //on mount
+    return () => { ignore = true }
+  }, [API_URL, fetchMatches, users, location])
+
+  //filter whenever the user list changes?
   useEffect(() => {
     const loggedUser = getUser(currentUser.email)
-    console.log(loggedUser)
-    setExcludedEmails(currentUser.email)
+    console.log("filter happens")
     const tempExclude = currentUser.email
     setFilteredUsers(users.filter(user => !tempExclude.includes(user.email)))
 
@@ -43,7 +58,7 @@ export default function Matches({ API_URL }) {
       //filter so that only contains organizers
       setFilteredUsers(users.filter(user => user.volunteer === false))
     }
-  }, [])
+  }, [currentUser.email])
 
   useEffect(() => {
     //on matches state change, then changes excluded
@@ -54,16 +69,6 @@ export default function Matches({ API_URL }) {
     }
 
   }, [matches])
-
-  const fetchMatches = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/v1/matches/" + currentUser.email)
-      const currentMatches = await response.json()
-      setMatches(currentMatches)
-    } catch (err) {
-      console.log(err.stack)
-    }
-  }
 
   const getUser = async (email) => {
     try {
@@ -120,7 +125,7 @@ export default function Matches({ API_URL }) {
             <br />
             {user.volunteer === true && <p>Volunteer</p>}
             {user.volunteer === false && <p>Organizer</p>}
-            < button onClick={() => addMatch(user.email)}
+            <button onClick={() => addMatch(user.email)}
               title='Match'
               type='submit'
               aria-label='Enter Name'
