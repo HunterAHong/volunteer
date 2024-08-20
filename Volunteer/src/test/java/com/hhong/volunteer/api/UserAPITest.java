@@ -2,7 +2,6 @@ package com.hhong.Volunteer.api;
 
 import com.hhong.Volunteer.TestConfig;
 import com.hhong.Volunteer.common.TestUtils;
-import com.hhong.Volunteer.models.Profile;
 import com.hhong.Volunteer.models.User;
 import com.hhong.Volunteer.services.UserService;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = TestConfig.class)
@@ -34,10 +35,9 @@ public class UserAPITest {
      * helper to make a user
      */
     private User createUser() {
-        Profile profile = new Profile("Hunter", "Hong", "Coder");
         User user = new User();
-        user.setPhoneNumber("5253932000");
-        user.setProfile(profile);
+        user.setEmail("5253932000");
+        user.setFirst("Hunter");
 
         return user;
     }
@@ -63,7 +63,7 @@ public class UserAPITest {
         service.deleteAll();
 
         final User user = createUser();
-        Assertions.assertNotNull(user.getPhoneNumber());
+        Assertions.assertNotNull(user.getEmail());
 
         mvc.perform(post("/api/v1/users").contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtils.asJsonString(user))).andExpect(status().isOk());
@@ -85,6 +85,7 @@ public class UserAPITest {
                 .content(TestUtils.asJsonString(user)));
 
         Assertions.assertEquals(1, service.count());
+        Assertions.assertEquals(service.findByEmail("5253932000").getFirst(), "Hunter");
     }
 
     /**
@@ -139,9 +140,8 @@ public class UserAPITest {
         service.save(user);
 
         User user2 = createUser();
-        user2.setPhoneNumber("5253932000");
-        Profile profile = new Profile("NotHunter", "Hong", "Bio");
-        user2.setProfile(profile);
+        user2.setEmail("5253932000");
+        user2.setFirst("NotHunter");
 
         try {
             mvc.perform(put("/api/v1/users/5253932000").contentType(MediaType.APPLICATION_JSON)
@@ -153,5 +153,94 @@ public class UserAPITest {
             e.printStackTrace();
             Assertions.fail();
         }
+    }
+
+    @Test
+    @Transactional
+    public void testAddMatch() {
+        final User user = createUser();
+        service.save(user);
+        User match = createUser();
+        match.setEmail("match.match.com");
+        service.save(match);
+
+        try {
+            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString(match))).andExpect(status().isOk());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    @Transactional
+    public void testGetMatches() {
+        final User user = createUser();
+        service.save(user);
+        User match = createUser();
+        match.setEmail("boo@boo.com");
+        User match2 = createUser();
+        match2.setEmail("ahh@ahh.com");
+        service.save(match);
+        service.save(match2);
+
+        try {
+            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString(match))).andExpect(status().isOk());
+            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString(match2))).andExpect(status().isOk());
+
+            Assertions.assertEquals(2, user.getMatches().size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail();
+        }
+
+        try {
+           String matches = mvc.perform(get("/api/v1/matches/5253932000")).andExpect(status().isOk())
+                    .andReturn().getResponse().getContentAsString();
+           Assertions.assertTrue(matches.contains("boo@boo.com") && matches.contains("ahh@ahh.com"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    @Transactional
+    public void testDeleteMatch() {
+        final User user = createUser();
+        service.save(user);
+        User match = createUser();
+        match.setEmail("boo@boo.com");
+        User match2 = createUser();
+        match2.setEmail("ahh@ahh.com");
+        service.save(match);
+        service.save(match2);
+
+        try {
+            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString(match))).andExpect(status().isOk());
+            mvc.perform(put("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.asJsonString(match2))).andExpect(status().isOk());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail();
+        }
+
+        try {
+            mvc.perform(delete("/api/v1/matches/5253932000").contentType(MediaType.APPLICATION_JSON)
+                            .content(TestUtils.asJsonString("boo@boo.com"))).andExpect(status().isOk());
+
+            String matches = mvc.perform(get("/api/v1/matches/5253932000")).andExpect(status().isOk())
+                    .andReturn().getResponse().getContentAsString();
+            Assertions.assertTrue(matches.contains("ahh@ahh.com"));
+            Assertions.assertFalse(matches.contains("boo@boo.com"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail();
+        }
+
     }
 }

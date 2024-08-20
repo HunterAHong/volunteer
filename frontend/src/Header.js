@@ -1,8 +1,8 @@
-const Header = () => {
+const Header = ({title}) => {
     return (
         <header>
             <h1>
-                My header!
+                {title}
             </h1>
         </header>
     )

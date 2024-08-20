@@ -28,11 +28,11 @@ public class UserService extends Service<User, Long>{
     /**
      * Find a user with the provided phone number.
      *
-     * @param phoneNumber number of the user to find
+     * @param email email of the user to find
      *
      * @return found user, null if none
      */
-    public User findByPhoneNumber(final String phoneNumber) {
-        return userRepository.findByPhoneNumber(phoneNumber.trim().toLowerCase());
+    public User findByEmail(final String email) {
+        return userRepository.findByEmail(email.trim().toLowerCase());
     }
 }
