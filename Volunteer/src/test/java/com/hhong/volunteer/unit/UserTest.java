@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,5 +72,24 @@ public class UserTest {
         userService.delete(user);
         Assertions.assertEquals(0, userService.findAll().size(),
                 "There should be no users");
+    }
+
+    @Test
+    @Transactional
+    public void testGetAndAddMatches() {
+        final User user = createUser();
+        userService.save(user);
+
+        Assertions.assertTrue(user.getMatches().isEmpty());
+        User match = createUser();
+        User match2 = createUser();
+        match.setEmail("boo@boo.com");
+        match.setEmail("ahh@ahh.com");
+        user.addMatch(match);
+        user.addMatch(match2);
+
+        List<User> matches = user.getMatches();
+        Assertions.assertEquals(2, matches.size());
+        Assertions.assertEquals(match, matches.get(0));
     }
 }

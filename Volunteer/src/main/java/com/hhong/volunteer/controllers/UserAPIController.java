@@ -114,6 +114,9 @@ public class UserAPIController extends APIController {
                     HttpStatus.NOT_FOUND);
         }
 
+        System.out.println(user.getMatches());
+        System.out.println("RESPONSE ENTITY:" + new ResponseEntity(user.getMatches(), HttpStatus.OK));
+
         return new ResponseEntity(user.getMatches(), HttpStatus.OK);
     }
 
@@ -126,8 +129,17 @@ public class UserAPIController extends APIController {
                     HttpStatus.NOT_FOUND);
         }
 
-        user.addMatch(matchEmail);
-        return new ResponseEntity(successResponse(matchEmail + " was added successfully"), HttpStatus.OK);
+        final User match = service.findByEmail(matchEmail.trim().toLowerCase());
+        if (null == match) {
+            return new ResponseEntity(
+                    errorResponse("No match found for email " + matchEmail.trim().toLowerCase()),
+                    HttpStatus.NOT_FOUND);
+        }
+        user.addMatch(match);
+        System.out.println(user.getMatches());
+        service.save(user);
+
+        return new ResponseEntity(user.getMatches(), HttpStatus.OK);
     }
 
     @DeleteMapping("/matches/{email}")
@@ -139,10 +151,11 @@ public class UserAPIController extends APIController {
                     HttpStatus.NOT_FOUND);
         }
 
-        boolean bool = user.deleteMatch(matchEmail);
+        boolean bool = user.deleteMatch(matchEmail.trim().toLowerCase());
+        service.save(user);
         if (bool) {
             return new ResponseEntity(successResponse(matchEmail + " was deleted successfully"), HttpStatus.OK);
         }
-        return new  ResponseEntity(errorResponse("Could not find " + matchEmail), HttpStatus.NOT_FOUND);
+        return new  ResponseEntity(errorResponse("Could not find match: " + matchEmail.substring(1, matchEmail.length()-1)), HttpStatus.NOT_FOUND);
     }
 }

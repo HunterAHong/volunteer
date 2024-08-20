@@ -12,6 +12,26 @@ export default function Signup() {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
+    async function addNewUser(email) {
+        const user = {
+            id: null,
+            email: email,
+            first: null,
+            last: null,
+            bio: null,
+            matches: [],
+            volunter: false
+        }
+
+        await fetch("http://localhost:8080/api/v1/users", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user)
+        })
+    }
+
     async function handleSubmit(e) {
         e.preventDefault()
 
@@ -23,6 +43,7 @@ export default function Signup() {
             setError('')
             setLoading(true)
             await signup(emailRef.current.value, passwordRef.current.value)
+            await addNewUser(emailRef.current.value)
             navigate('/')
         } catch (error) {
             console.error(error)
