@@ -58,7 +58,7 @@ export default function Matches({ API_URL }) {
       //filter so that only contains organizers
       setFilteredUsers(users.filter(user => user.volunteer === false))
     }
-  }, [currentUser.email])
+  }, [currentUser.email, users])
 
   useEffect(() => {
     //on matches state change, then changes excluded
