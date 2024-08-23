@@ -49,7 +49,6 @@ export default function Matches({ API_URL }) {
   //filter whenever the user list changes?
   useEffect(() => {
     const loggedUser = getUser(currentUser.email)
-    console.log("filter happens")
     const tempExclude = currentUser.email
     setFilteredUsers(users.filter(user => !tempExclude.includes(user.email)))
 

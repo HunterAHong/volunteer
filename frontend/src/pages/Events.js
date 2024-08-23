@@ -1,13 +1,58 @@
 import { useEffect, useState } from "react"
 import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp, where } from "firebase/firestore"
 import { auth, db } from "../firebase"
+import { useAuth } from '../contexts/AuthContext'
 import "../css/chat.css"
 
 export default function Events(props) {
-    const { room } = props
+    //const { room } = props
+    const { currentUser } = useAuth()
+    const [room, setRoom] = useState(currentUser.email)
+    const [user, setUser] = useState(null)
+    const [isVolunteer, setIsVolunteer] = useState(null)
     const [newMessage, setNewMessage] = useState("")
     const [messages, setMessages] = useState([])
     const messagesRef = collection(db, "messages")
+
+    const getUser = async (email) => {
+        try {
+            const response = await fetch("http://localhost:8080/api/v1/users/" + email)
+            const user = await response.json()
+            return user
+        } catch (err) {
+            console.log(err.stack)
+        }
+    }
+
+    useEffect(() => {
+        const getUser = async () => {
+            try {
+                const response = await fetch("http://localhost:8080/api/v1/users/" + currentUser.email)
+                const user = await response.json()
+                setUser(user)
+            } catch (err) {
+                console.log(err.stack)
+            }
+        }
+
+        getUser()
+    }, [])
+
+    useEffect(() => {
+        if (user) {
+            if (user.volunteer) {
+                console.log("user is volunteer")
+                setIsVolunteer(true)
+                if (user.matches) {
+                    setRoom(user.matches[0].email)
+                }
+            } else {
+                console.log("user is organizer")
+                setIsVolunteer(false)
+                setRoom(currentUser.email)
+            }
+        }
+    }, [user])
 
     useEffect(() => {
         const queryMessages = query(
@@ -42,6 +87,9 @@ export default function Events(props) {
 
     return (
         <div className="chat-app">
+            <div>
+                {isVolunteer ? <h2>Volunteer mode</h2> : <h2>Organizer mode</h2>}
+            </div>
             <div className="header">
                 <h1> Welcome to: {room}</h1>
             </div>
