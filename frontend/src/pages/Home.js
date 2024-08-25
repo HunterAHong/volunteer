@@ -1,11 +1,9 @@
-import UserForm from "../UserForm";
-import React, { useState, useEffect, Switch } from "react"
-import { Card, Button, Alert, Form } from 'react-bootstrap'
+import React, { useState, useEffect } from "react"
+import { Button, Form } from 'react-bootstrap'
 import { useAuth } from "../contexts/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
-import { getScopedCssBaselineUtilityClass } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-export default function Home({ API_URL }) {
+export default function Home() {
     const [error, setError] = useState("")
     const { currentUser, logout } = useAuth()
     const navigate = useNavigate()
@@ -15,14 +13,12 @@ export default function Home({ API_URL }) {
     useEffect(() => {
         const fetchInitialSwitchState = async () => {
             const user = await getUser()
-            console.log("Initial user state: " + user.volunteer)
             setIsVolunteer(user.volunteer)
             setIsChecked(!user.volunteer)
         }
 
         fetchInitialSwitchState()
-        console.log("checked " + isChecked)
-    }, [])
+    }, [isChecked])
 
     async function handleLogout() {
         setError('')
