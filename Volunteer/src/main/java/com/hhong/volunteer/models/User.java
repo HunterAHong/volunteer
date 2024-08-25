@@ -2,6 +2,8 @@ package com.hhong.Volunteer.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -10,24 +12,24 @@ public class User extends DomainObject {
     @GeneratedValue
     private Long id;
 
-    private String phoneNumber;
+    private String email;
+    private String first;
+    private String last;
+    private String bio;
+    private String city;
+    private String state;
+    private boolean isVolunteer;
 
-    @Embedded
-    private Profile profile;
+    @OneToMany
+    private List<User> matches;
 
     public User() {
-        this.profile = new Profile();
-        this.phoneNumber = "";
+        this.email = "";
+        this.matches = new ArrayList<>();
     }
-    public User(Profile profile, String phoneNumber) {
+    public User(String email) {
         super();
-        this.profile = profile;
-        this.phoneNumber = phoneNumber;
-    }
-
-    public User(String phoneNumber) {
-        super();
-        this.phoneNumber = phoneNumber;
+        this.email = email;
     }
 
     /**
@@ -45,25 +47,88 @@ public class User extends DomainObject {
         return null;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public String getEmail() {
+        return email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getBio() {
+        return bio;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getLast() {
+        return last;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
+    }
+
+    public String getFirst() {
+        return first;
+    }
+
+    public void setFirst(String first) {
+        this.first = first;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public boolean isVolunteer() {
+        return isVolunteer;
+    }
+
+    public void setVolunteer(boolean volunteer) {
+        isVolunteer = volunteer;
+    }
+
+    public List<User> getMatches() {
+        return this.matches;
+    }
+
+    public void addMatch(User match) {
+        this.matches.add(match);
+    }
+
+    public boolean deleteMatch(String matchEmail) {
+        for (int i =0; i < this.matches.size(); i++) {
+            if (this.matches.get(i).getEmail().equals(matchEmail)) {
+                this.matches.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void editUser(User editedUser) {
-        this.phoneNumber = editedUser.getPhoneNumber();
-        this.profile = editedUser.getProfile();
+        this.email = editedUser.getEmail();
+        this.bio = editedUser.getBio();
+        this.last = editedUser.getLast();
+        this.first = editedUser.getFirst();
+        this.state = editedUser.getState();
+        this.city = editedUser.getCity();
+        this.isVolunteer = editedUser.isVolunteer();
     }
 
     @Override
@@ -71,20 +136,25 @@ public class User extends DomainObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(profile, user.profile);
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(first, user.first) && Objects.equals(last, user.last) && Objects.equals(bio, user.bio) && Objects.equals(city, user.city) && Objects.equals(state, user.state) && Objects.equals(matches, user.matches);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, phoneNumber, profile);
+        return Objects.hash(id, email, first, last, bio, city, state, matches);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", profile=" + profile +
+                ", email='" + email + '\'' +
+                ", first='" + first + '\'' +
+                ", last='" + last + '\'' +
+                ", bio='" + bio + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", matches=" + matches +
                 '}';
     }
 }
