@@ -4,16 +4,16 @@ import { auth, db } from "../firebase"
 import { useAuth } from '../contexts/AuthContext'
 import "../css/chat.css"
 
-export default function Events(props) {
-    //const { room } = props
+export default function Events() {
     const { currentUser } = useAuth()
+    const messagesRef = collection(db, "messages")
     const [room, setRoom] = useState(currentUser.email)
     const [user, setUser] = useState(null)
     const [isVolunteer, setIsVolunteer] = useState(null)
     const [newMessage, setNewMessage] = useState("")
     const [messages, setMessages] = useState([])
-    const messagesRef = collection(db, "messages")
 
+    // gets the current user and sets it to the state
     useEffect(() => {
         const getUser = async () => {
             try {
@@ -28,6 +28,7 @@ export default function Events(props) {
         getUser()
     }, [currentUser.email])
 
+    // checks if user is a volunteer or organizer and sets the chat rooms accordingly
     useEffect(() => {
         if (user) {
             if (user.volunteer) {
@@ -44,6 +45,7 @@ export default function Events(props) {
         }
     }, [user, currentUser.email])
 
+    // gets the messages
     useEffect(() => {
         const queryMessages = query(
             messagesRef,

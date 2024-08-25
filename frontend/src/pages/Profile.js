@@ -4,10 +4,10 @@ import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import ProfilePicture from "./ProfilePicture";
 
-export default function Profile({ API_URL }) {
-    const [error, setError] = useState("")
-    const { currentUser, logout } = useAuth()
+export default function Profile() {
     const navigate = useNavigate()
+    const { currentUser, logout } = useAuth()
+    const [error, setError] = useState("")
 
     async function handleLogout() {
         setError('')

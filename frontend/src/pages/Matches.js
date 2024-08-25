@@ -12,6 +12,7 @@ export default function Matches({ API_URL }) {
   const [filteredUsers, setFilteredUsers] = useState([])
   const [users, setUsers] = useState([])
 
+  // fetches all matches of the current user
   const fetchMatches = useCallback(async () => {
     try {
       const response = await fetch("http://localhost:8080/api/v1/matches/" + currentUser.email)
@@ -22,9 +23,8 @@ export default function Matches({ API_URL }) {
     }
   }, [currentUser.email])
 
+  // sets the total user list
   useEffect(() => {
-    console.log(users)
-
     let ignore = false
     const fetchUsers = async () => {
       try {
@@ -46,21 +46,21 @@ export default function Matches({ API_URL }) {
     return () => { ignore = true }
   }, [API_URL, fetchMatches, users, location])
 
-  //filter whenever the user list changes?
+  // filters whenever the user list changes
   useEffect(() => {
     const loggedUser = getUser(currentUser.email)
     const tempExclude = currentUser.email
     setFilteredUsers(users.filter(user => !tempExclude.includes(user.email)))
 
-    //true is volunteer mode
+    // true is volunteer mode
     if (loggedUser.volunteer) {
-      //filter so that only contains organizers
+      // filter so that only contains organizers
       setFilteredUsers(users.filter(user => user.volunteer === false))
     }
   }, [currentUser.email, users])
 
+  // when matches of current user change, update the list to display of possible matches
   useEffect(() => {
-    //on matches state change, then changes excluded
     if (matches.length > 0) {
       for (let i = 0; i < matches.length; i++) {
         setExcludedEmails(excludedEmails => [...excludedEmails, matches[i].email])
@@ -151,7 +151,5 @@ export default function Matches({ API_URL }) {
           </Card.Body>
         </Card>
       </div>
-
     </main >)
-
 }

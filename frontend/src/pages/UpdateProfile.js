@@ -12,13 +12,13 @@ export default function UpdateProfile() {
     const cityRef = useRef()
     const stateRef = useRef()
     const { currentUser, updateEmail, updatePassword } = useAuth()
+    const navigate = useNavigate()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
 
     async function getUser() {
-        //fetch user based on email
-        //translate from json to obj
+        // fetch user based on email
+        // then translate from json to obj
         try {
             const userResponse = await fetch("http://localhost:8080/api/v1/users/" + currentUser.email)
             const user = await userResponse.json()
@@ -43,7 +43,6 @@ export default function UpdateProfile() {
             user.state = state
         }
 
-        // PUT user
         await fetch("http://localhost:8080/api/v1/users/" + email, {
             method: 'PUT',
             headers: {

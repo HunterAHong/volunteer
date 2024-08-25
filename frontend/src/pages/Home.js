@@ -4,12 +4,13 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-    const [error, setError] = useState("")
     const { currentUser, logout } = useAuth()
     const navigate = useNavigate()
+    const [error, setError] = useState("")
     const [isVolunteer, setIsVolunteer] = useState(true)
     const [isChecked, setIsChecked] = useState(false)
 
+    // gets intial user and sets the volunteer state and checked state
     useEffect(() => {
         const fetchInitialSwitchState = async () => {
             const user = await getUser()
@@ -44,8 +45,6 @@ export default function Home() {
     async function switchChange() {
         const user = await getUser()
         user.volunteer = !isVolunteer
-        console.log(!isVolunteer)
-        console.log(user.volunteer)
         setIsVolunteer(!isVolunteer)
         setIsChecked(!isChecked)
         console.log("switched su[[psedi;sy")
