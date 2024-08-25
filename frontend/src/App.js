@@ -11,15 +11,11 @@ import UpdateProfile from "./pages/UpdateProfile";
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import { useState } from "react";
 
 function App() {
   const API_URL = "http://localhost:8080/api/v1/users"
-  // form stuff
-
-  const addItem = (item) => {
-    //think about what an item is, how it is constructed
-    //set id
-  }
+  const [room, setRoom] = useState("1")
 
   return (
     <div className="App">
@@ -29,7 +25,7 @@ function App() {
           <Route path="/" element={<PrivateRoute><Home API_URL={API_URL} /></PrivateRoute>} />
           <Route path="/update-profile" element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
           <Route path="/matches" element={<Matches API_URL={API_URL} />} />
-          <Route path="/events" element={<Events />} />
+          <Route path="/events" element={<Events room={room} />} />
           <Route path="/profile" element={<Profile API_URL={API_URL} />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
