@@ -71,7 +71,7 @@ export async function upload(file, currentUser, setLoading) {
     const fileRef = ref(storage, auth.currentUser.email + '.png')
 
     setLoading(true)
-    const snapshot = await uploadBytes(fileRef, file)
+    await uploadBytes(fileRef, file)
     const photoURL = await getDownloadURL(fileRef)
 
     updateProfile(auth.currentUser, { photoURL })

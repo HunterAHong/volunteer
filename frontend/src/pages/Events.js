@@ -4,26 +4,16 @@ import { auth, db } from "../firebase"
 import { useAuth } from '../contexts/AuthContext'
 import "../css/chat.css"
 
-export default function Events(props) {
-    //const { room } = props
+export default function Events() {
     const { currentUser } = useAuth()
+    const messagesRef = collection(db, "messages")
     const [room, setRoom] = useState(currentUser.email)
     const [user, setUser] = useState(null)
     const [isVolunteer, setIsVolunteer] = useState(null)
     const [newMessage, setNewMessage] = useState("")
     const [messages, setMessages] = useState([])
-    const messagesRef = collection(db, "messages")
 
-    const getUser = async (email) => {
-        try {
-            const response = await fetch("http://localhost:8080/api/v1/users/" + email)
-            const user = await response.json()
-            return user
-        } catch (err) {
-            console.log(err.stack)
-        }
-    }
-
+    // gets the current user and sets it to the state
     useEffect(() => {
         const getUser = async () => {
             try {
@@ -36,8 +26,9 @@ export default function Events(props) {
         }
 
         getUser()
-    }, [])
+    }, [currentUser.email])
 
+    // checks if user is a volunteer or organizer and sets the chat rooms accordingly
     useEffect(() => {
         if (user) {
             if (user.volunteer) {
@@ -52,8 +43,9 @@ export default function Events(props) {
                 setRoom(currentUser.email)
             }
         }
-    }, [user])
+    }, [user, currentUser.email])
 
+    // gets the messages
     useEffect(() => {
         const queryMessages = query(
             messagesRef,
@@ -69,7 +61,7 @@ export default function Events(props) {
         })
 
         return () => unsuscribe()
-    }, [])
+    }, [messagesRef, room])
 
     const handleSubmit = async (e) => {
         e.preventDefault()

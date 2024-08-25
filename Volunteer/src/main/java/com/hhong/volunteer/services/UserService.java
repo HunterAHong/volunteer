@@ -26,7 +26,7 @@ public class UserService extends Service<User, Long>{
     }
 
     /**
-     * Find a user with the provided phone number.
+     * Find a user with the provided email.
      *
      * @param email email of the user to find
      *

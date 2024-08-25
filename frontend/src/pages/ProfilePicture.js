@@ -7,6 +7,7 @@ export default function ProfilePicture() {
     const currentUser = useAuth()
     const [loading, setLoading] = useState(false)
     const [photo, setPhoto] = useState(null)
+    // temp placeholder
     const [photoURL, setPhotoURL] = useState("https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg")
 
     function handleChange(e) {

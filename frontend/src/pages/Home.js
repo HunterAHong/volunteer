@@ -1,28 +1,25 @@
-import UserForm from "../UserForm";
-import React, { useState, useEffect, Switch } from "react"
-import { Card, Button, Alert, Form } from 'react-bootstrap'
+import React, { useState, useEffect } from "react"
+import { Button, Form } from 'react-bootstrap'
 import { useAuth } from "../contexts/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
-import { getScopedCssBaselineUtilityClass } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-export default function Home({ API_URL }) {
-    const [error, setError] = useState("")
+export default function Home() {
     const { currentUser, logout } = useAuth()
     const navigate = useNavigate()
+    const [error, setError] = useState("")
     const [isVolunteer, setIsVolunteer] = useState(true)
     const [isChecked, setIsChecked] = useState(false)
 
+    // gets intial user and sets the volunteer state and checked state
     useEffect(() => {
         const fetchInitialSwitchState = async () => {
             const user = await getUser()
-            console.log("Initial user state: " + user.volunteer)
             setIsVolunteer(user.volunteer)
             setIsChecked(!user.volunteer)
         }
 
         fetchInitialSwitchState()
-        console.log("checked " + isChecked)
-    }, [])
+    }, [isChecked])
 
     async function handleLogout() {
         setError('')
@@ -48,8 +45,6 @@ export default function Home({ API_URL }) {
     async function switchChange() {
         const user = await getUser()
         user.volunteer = !isVolunteer
-        console.log(!isVolunteer)
-        console.log(user.volunteer)
         setIsVolunteer(!isVolunteer)
         setIsChecked(!isChecked)
         console.log("switched su[[psedi;sy")

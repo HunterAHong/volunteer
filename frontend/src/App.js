@@ -22,11 +22,11 @@ function App() {
       <Navbar />
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<PrivateRoute><Home API_URL={API_URL} /></PrivateRoute>} />
+          <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
           <Route path="/update-profile" element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
           <Route path="/matches" element={<Matches API_URL={API_URL} />} />
-          <Route path="/events" element={<Events room={room} />} />
-          <Route path="/profile" element={<Profile API_URL={API_URL} />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

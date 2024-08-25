@@ -4,13 +4,15 @@ import { useAuth } from '../contexts/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function Signup() {
+    // form refs
     const emailRef = useRef()
     const passwordRef = useRef()
     const passwordConfirmRef = useRef()
     const { signup } = useAuth()
+    const navigate = useNavigate()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
+
 
     async function addNewUser(email) {
         const user = {
@@ -39,6 +41,7 @@ export default function Signup() {
             return setError('Passwords do not match')
         }
 
+        // if passwords do match, then create new user
         try {
             setError('')
             setLoading(true)
@@ -84,7 +87,6 @@ export default function Signup() {
                 <div className='w-100 text-center mt-2'>
                     Already have an account? <Link to="/login">Log In</Link>
                 </div>
-
             </div>
         </Container>
     )
